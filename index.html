@@ -4,18 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alive</title>
-  <script type="module" crossorigin src="/assets/index-C5b6qSNZ.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BIwNGWpS.css">
+  <script type="module" crossorigin src="/assets/index-CYPTENnm.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-B37W2oaA.css">
 </head>
 <body>
-  <div class="container">
-    <div class="avatar">
-      Br
-      <div class="status-indicator" id="indicator"></div>
-    </div>
-    <div class="status-text" id="statusText">加载中...</div>
-    <div class="status-text-en" id="statusTextEn">Loading...</div>
-  </div>
+  <main class="status-page" id="statusPage">
+    <section class="orbital-shell" aria-labelledby="statusText">
+      <header class="tech-topline">
+        <span id="monitorTitle">ALIVE ORBITAL MONITOR</span>
+      </header>
+
+      <div class="orbital-grid">
+        <div class="orbit-radar">
+          <figure class="orbital-avatar">
+            <span class="orbital-ripple" aria-hidden="true"></span>
+            <span class="orbital-ripple" aria-hidden="true"></span>
+            <span class="orbital-ripple" aria-hidden="true"></span>
+            <span class="orbital-halo" aria-hidden="true"></span>
+            <span class="orbital-initials" id="avatarInitials" aria-hidden="true">Br</span>
+            <img id="avatarImage" alt="Br 的轨道监控头像" loading="eager" referrerpolicy="no-referrer">
+          </figure>
+        </div>
+
+        <div class="orbit-copy">
+          <p class="kicker" id="statusKicker">当前状态</p>
+          <h1 class="status-text" id="statusText">加载中...</h1>
+          <p class="status-text-en" id="statusTextEn">Loading...</p>
+          <div class="metric-grid" aria-label="状态摘要">
+            <div class="metric-cell">
+              <span id="elapsedLabel">静默时间</span>
+              <strong id="elapsedText">--</strong>
+            </div>
+            <div class="metric-cell">
+              <span id="lastSyncLabel">最近同步</span>
+              <strong id="lastSyncText">--</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ol class="status-rail" id="statusRail" aria-label="状态时间线"></ol>
+    </section>
+  </main>
 
 </body>
 </html>
