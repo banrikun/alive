@@ -14,8 +14,6 @@ const elements = {
   lastSyncLabel: document.getElementById('lastSyncLabel'),
   lastSyncText: document.getElementById('lastSyncText'),
   statusRail: document.getElementById('statusRail'),
-  avatarImage: document.getElementById('avatarImage'),
-  avatarInitials: document.getElementById('avatarInitials'),
 };
 
 const formatHours = (hours) => {
@@ -64,9 +62,6 @@ const updateUI = (status, timestamp, hours, config) => {
   elements.elapsedText.textContent = formatHours(hours);
   elements.lastSyncLabel.textContent = ui.lastSyncLabel;
   elements.lastSyncText.textContent = formatDateTime(timestamp.last_update);
-  elements.avatarInitials.textContent = name;
-  elements.avatarImage.src = ui.avatarUrl;
-  elements.avatarImage.alt = ui.avatarAlt;
 
   renderStatusRail(status);
 };
@@ -78,9 +73,5 @@ const updateStatus = async () => {
 
   updateUI(status, timestamp, hours, siteConfig);
 };
-
-elements.avatarImage.addEventListener('error', () => {
-  elements.avatarImage.classList.add('is-hidden');
-});
 
 updateStatus();

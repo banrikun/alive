@@ -2,8 +2,6 @@ export const siteConfig = {
   name: 'Br',
   ui: {
     title: 'ALIVE STATUS',
-    avatarUrl: 'https://avatars.githubusercontent.com/u/7817228?v=4',
-    avatarAlt: 'Br',
     currentLabel: '当前状态',
     elapsedLabel: '静默时间',
     lastSyncLabel: '最近同步',
