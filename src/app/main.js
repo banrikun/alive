@@ -66,7 +66,7 @@ const updateUI = (status, timestamp, hours, config) => {
   elements.lastSyncText.textContent = formatDateTime(timestamp.last_update);
   elements.avatarInitials.textContent = name;
   elements.avatarImage.src = ui.avatarUrl;
-  elements.avatarImage.alt = `${name} 的轨道监控头像`;
+  elements.avatarImage.alt = ui.avatarAlt;
 
   renderStatusRail(status);
 };

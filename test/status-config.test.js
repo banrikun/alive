@@ -18,7 +18,9 @@ describe('status config', () => {
   });
 
   it('keeps UI display copy in the compiled status config', () => {
+    assert.equal(siteConfig.ui.title, 'ALIVE STATUS');
     assert.equal(siteConfig.ui.avatarUrl, 'https://avatars.githubusercontent.com/u/7817228?v=4');
+    assert.equal(siteConfig.ui.avatarAlt, 'Br');
 
     assert.deepEqual(
       siteConfig.statusConfig.map(({ ui }) => ({
