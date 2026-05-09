@@ -1,5 +1,12 @@
 export const siteConfig = {
   name: 'Br',
+  ui: {
+    title: 'ALIVE ORBITAL MONITOR',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/7817228?v=4',
+    currentLabel: '当前状态',
+    elapsedLabel: '静默时间',
+    lastSyncLabel: '最近同步',
+  },
   statusConfig: [
     {
       hours: 0,
@@ -7,6 +14,13 @@ export const siteConfig = {
       en: '${name} is currently very active.',
       class: 'status-active',
       notify: false,
+      ui: {
+        label: '在线活动',
+        window: '0-24 小时',
+        accent: '#22c55e',
+        accent2: '#38bdf8',
+        text: '#d9fff0',
+      },
     },
     {
       hours: 24,
@@ -14,6 +28,13 @@ export const siteConfig = {
       en: '${name} seems to have been resting for a while.',
       class: 'status-resting',
       notify: true,
+      ui: {
+        label: '长时间休息',
+        window: '1-3 天',
+        accent: '#f59e0b',
+        accent2: '#22d3ee',
+        text: '#fff2cf',
+      },
     },
     {
       hours: 72,
@@ -21,6 +42,13 @@ export const siteConfig = {
       en: '${name} has been disconnected for some time.',
       class: 'status-disconnected',
       notify: true,
+      ui: {
+        label: '连接延迟',
+        window: '3-7 天',
+        accent: '#fb7185',
+        accent2: '#fbbf24',
+        text: '#ffe0e5',
+      },
     },
     {
       hours: 168,
@@ -28,6 +56,13 @@ export const siteConfig = {
       en: '${name} may have left.',
       class: 'status-away',
       notify: true,
+      ui: {
+        label: '静默观察',
+        window: '7-30 天',
+        accent: '#f43f5e',
+        accent2: '#a78bfa',
+        text: '#ffdce4',
+      },
     },
     {
       hours: 720,
@@ -35,6 +70,13 @@ export const siteConfig = {
       en: 'The past is gone, live in the present.',
       class: 'status-gone',
       notify: true,
+      ui: {
+        label: '归档状态',
+        window: '30 天以上',
+        accent: '#94a3b8',
+        accent2: '#67e8f9',
+        text: '#edf2f7',
+      },
     },
   ],
 };
