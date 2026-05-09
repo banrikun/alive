@@ -1,0 +1,40 @@
+export const siteConfig = {
+  name: 'Br',
+  statusConfig: [
+    {
+      hours: 0,
+      zh: '${name} 当前非常活跃。',
+      en: '${name} is currently very active.',
+      class: 'status-active',
+      notify: false,
+    },
+    {
+      hours: 24,
+      zh: '${name} 似乎休息了很长时间。',
+      en: '${name} seems to have been resting for a while.',
+      class: 'status-resting',
+      notify: true,
+    },
+    {
+      hours: 72,
+      zh: '${name} 已经失联一段时间了。',
+      en: '${name} has been disconnected for some time.',
+      class: 'status-disconnected',
+      notify: true,
+    },
+    {
+      hours: 168,
+      zh: '${name} 可能离开了。',
+      en: '${name} may have left.',
+      class: 'status-away',
+      notify: true,
+    },
+    {
+      hours: 720,
+      zh: '往事如风，活在当下。',
+      en: 'The past is gone, live in the present.',
+      class: 'status-gone',
+      notify: true,
+    },
+  ],
+};

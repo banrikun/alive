@@ -14,22 +14,35 @@ on:
 jobs:
   check-status:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - name: Checkout repository
+      - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Checkout published site data
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: published
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Check status and send notification
+        working-directory: source
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}
+          TIMESTAMP_PATH: ../published/timestamp.json
           TEST_HOURS: ${{ github.event.inputs.test_hours }}
         run: |
           node .github/scripts/check-status.js
