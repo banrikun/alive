@@ -68,10 +68,6 @@ body {
   color: #666;
 }
 
-.error {
-  color: #e74c3c;
-}
-
 .status-active { background-color: #2ecc71; }
 .status-resting { background-color: #f39c12; }
 .status-disconnected { background-color: #e67e22; }

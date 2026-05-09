@@ -6,7 +6,7 @@ import {
   getCurrentStatus,
   getHoursSince,
   interpolate,
-} from '../src/status.js';
+} from '../src/lib/status.js';
 
 const statusConfig = [
   { hours: 0, zh: '${name} active', en: '${name} active', class: 'status-active', notify: false },
@@ -31,6 +31,13 @@ describe('status utilities', () => {
     const hours = getHoursSince('2026-05-09T00:00:00.000Z', new Date('2026-05-09T06:30:00.000Z'));
 
     assert.equal(hours, 6.5);
+  });
+
+  it('treats a missing or invalid timestamp as current time', () => {
+    const now = new Date('2026-05-09T06:30:00.000Z');
+
+    assert.equal(getHoursSince(undefined, now), 0);
+    assert.equal(getHoursSince('not-a-date', now), 0);
   });
 
   it('formats elapsed duration as days and hours', () => {

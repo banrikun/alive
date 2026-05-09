@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { generateEmailBody, readTimestampFile, shouldSendNotification } from '../src/notification.js';
+import { generateEmailBody, shouldSendNotification } from '../.github/scripts/check-status.js';
 
 const statusConfig = [
   { hours: 0, zh: '${name} active', en: '${name} active', class: 'status-active', notify: false },
@@ -9,7 +9,7 @@ const statusConfig = [
   { hours: 72, zh: '${name} disconnected', en: '${name} disconnected', class: 'status-disconnected', notify: true },
 ];
 
-describe('notification utilities', () => {
+describe('GitHub Actions status check utilities', () => {
   it('notifies only inside the first 24 hours of a notifiable status window', () => {
     assert.equal(shouldSendNotification(23.99, statusConfig), false);
     assert.equal(shouldSendNotification(24, statusConfig), true);
@@ -29,9 +29,5 @@ describe('notification utilities', () => {
     assert.match(body, /Br resting/);
     assert.match(body, /Last update: 2026-05-09T00:00:00.000Z/);
     assert.match(body, /Time elapsed: 1 天 1 小时/);
-  });
-
-  it('returns null when the timestamp file is not available yet', () => {
-    assert.equal(readTimestampFile('dev/not-found.json'), null);
   });
 });
