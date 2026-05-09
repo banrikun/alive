@@ -1,0 +1,49 @@
+name: Status Check and Notify
+
+on:
+  schedule:
+    # 每6小时执行一次 (UTC时间: 0, 6, 12, 18点)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      test_hours:
+        description: 'Test: Override hours since last update (留空使用实际时间)'
+        required: false
+        type: string
+
+jobs:
+  check-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check status and send notification
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}
+          TEST_HOURS: ${{ github.event.inputs.test_hours }}
+        run: |
+          node .github/scripts/check-status.js
+
+      - name: Send email notification
+        if: env.SHOULD_NOTIFY == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: ${{ env.EMAIL_SUBJECT }}
+          to: ${{ secrets.RECIPIENT_EMAILS }}
+          from: ${{ secrets.SMTP_USERNAME }}
+          body: ${{ env.EMAIL_BODY }}
+          content_type: text/plain

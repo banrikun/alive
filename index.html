@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alive</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-top: -10%;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 30px;
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .status-indicator {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 4px solid white;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .status-text {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .status-text-en {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .error {
+      color: #e74c3c;
+    }
+
+    /* 状态颜色 */
+    .status-active { background-color: #2ecc71; }
+    .status-resting { background-color: #f39c12; }
+    .status-disconnected { background-color: #e67e22; }
+    .status-away { background-color: #e74c3c; }
+    .status-gone { background-color: #95a5a6; }
+
+    /* 移动端适配 */
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+      }
+
+      .status-indicator {
+        width: 25px;
+        height: 25px;
+        border: 3px solid white;
+      }
+
+      .status-text {
+        font-size: 20px;
+      }
+
+      .status-text-en {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="avatar">
+      Br
+      <div class="status-indicator" id="indicator"></div>
+    </div>
+    <div class="status-text" id="statusText">加载中...</div>
+    <div class="status-text-en" id="statusTextEn">Loading...</div>
+  </div>
+
+  <script>
+    const elements = {
+      statusText: document.getElementById('statusText'),
+      statusTextEn: document.getElementById('statusTextEn'),
+      indicator: document.getElementById('indicator')
+    };
+
+    const getTimeDiff = (lastUpdate) => {
+      const now = new Date();
+      const last = new Date(lastUpdate);
+      return (now - last) / (1000 * 60 * 60);
+    };
+
+    const interpolate = (template, name) => {
+      return template.includes('${name}') ? template.replace('${name}', name) : template;
+    };
+
+    const getCurrentStatus = (hours, statusConfig) => {
+      // 从后往前找，返回第一个 hours <= 当前时间的配置
+      for (let i = statusConfig.length - 1; i >= 0; i--) {
+        if (hours >= statusConfig[i].hours) {
+          return statusConfig[i];
+        }
+      }
+      // 理论上不应该到这里，但作为保底返回第一个
+      return statusConfig[0];
+    };
+
+    const updateUI = (status, name) => {
+      elements.statusText.textContent = interpolate(status.zh, name);
+      elements.statusTextEn.textContent = interpolate(status.en, name);
+      elements.indicator.className = `status-indicator ${status.class}`;
+    };
+
+    const showError = (zhText, enText) => {
+      elements.statusText.textContent = zhText;
+      elements.statusText.className = 'status-text error';
+      elements.statusTextEn.textContent = enText;
+    };
+
+    const updateStatus = (config) => {
+      fetch(`timestamp.json?${Date.now()}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Failed to load status');
+          return response.json();
+        })
+        .then(data => {
+          const hours = getTimeDiff(data.last_update);
+          const status = getCurrentStatus(hours, config.statusConfig);
+          updateUI(status, config.name);
+        })
+        .catch(() => showError('无法加载状态', 'Unable to load status'));
+    };
+
+    fetch(`config.json?${Date.now()}`)
+      .then(response => response.json())
+      .then(config => updateStatus(config))
+      .catch(() => showError('配置加载失败', 'Failed to load configuration'));
+  </script>
+</body>
+</html>
