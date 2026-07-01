@@ -79,22 +79,18 @@ export const runStatusCheck = ({
 
   const hours = testHours ? parseFloat(testHours) : getHoursSince(timestamp.last_update);
 
-  console.log(`Hours since last update: ${hours.toFixed(2)}`);
-
   const currentStatus = getCurrentStatus(hours, siteConfig.statusConfig);
   const statusText = interpolate(currentStatus.zh, siteConfig.name);
 
-  console.log(`Current status: ${statusText}`);
-  console.log(`Notify flag in config: ${currentStatus.notify}`);
-  console.log(`Status starts at: ${currentStatus.hours}h`);
-  console.log(`Notification window: ${currentStatus.hours}h - ${currentStatus.hours + 24}h`);
+  console.log(`Status check: ${hours.toFixed(2)}h since last update; ${statusText}`);
 
   const shouldNotify = shouldSendNotification(hours, siteConfig.statusConfig);
-  console.log(`Current hours (${hours.toFixed(2)}) in notification window: ${shouldNotify}`);
 
   if (shouldNotify) {
     const emailSubject = `Status Alert: ${statusText}`;
     const emailBody = generateEmailBody(siteConfig.name, currentStatus, timestamp, hours);
+
+    console.log(`Notification window: ${currentStatus.hours}h - ${currentStatus.hours + 24}h`);
 
     setEnvVar('SHOULD_NOTIFY', 'true');
     setEnvVar('EMAIL_SUBJECT', emailSubject);
@@ -105,7 +101,7 @@ export const runStatusCheck = ({
   }
 
   setEnvVar('SHOULD_NOTIFY', 'false');
-  console.log('No notification needed (either notify=false or outside notification window)');
+  console.log('No notification needed');
 };
 
 const isDirectRun = process.argv[1]

@@ -14,8 +14,12 @@ on:
 jobs:
   check-status:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: read
+    concurrency:
+      group: status-check
+      cancel-in-progress: false
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -28,6 +32,9 @@ jobs:
         with:
           ref: gh-pages
           path: published
+          sparse-checkout: |
+            timestamp.json
+          sparse-checkout-cone-mode: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
